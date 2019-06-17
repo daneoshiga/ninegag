@@ -1,4 +1,3 @@
-import asyncio
 import logging
 
 import aiohttp
@@ -30,38 +29,38 @@ async def channel_publish():
             response = await resp.json()
             posts = response["data"]["posts"]
 
-        for post in posts:
-            section, _ = await Section.get_or_create(name=post["postSection"]["name"])
-            post_obj, created = await Post.get_or_create(
-                id=post["id"],
-                url=post["url"],
-                file_url=get_file_url(post),
-                title=post["title"],
-                section=section,
-                post_type=post["type"],
-                has_audio=bool(
-                    post["type"] == "Animated"
-                    and post["images"]["image460sv"]["hasAudio"]
-                ),
-                tags=",".join(tag["url"].split("/tag/")[1] for tag in post["tags"]),
-            )
-            if not created:
-                continue
+    for post in posts:
+        section, _ = await Section.get_or_create(name=post["postSection"]["name"])
+        post_obj, created = await Post.get_or_create(
+            id=post["id"],
+            url=post["url"],
+            file_url=get_file_url(post),
+            title=post["title"],
+            section=section,
+            post_type=post["type"],
+            has_audio=bool(
+                post["type"] == "Animated"
+                and post["images"]["image460sv"]["hasAudio"]
+            ),
+            tags=",".join(tag["url"].split("/tag/")[1] for tag in post["tags"]),
+        )
+        if not created:
+            continue
 
-            params = {
-                "chat_id": CHAT_ID,
-                "caption": await post_obj.caption(),
-                "parse_mode": types.ParseMode.HTML,
-            }
-            if post_obj.is_photo():
-                send_method = bot.send_photo
-                params["photo"] = post_obj.file_url
-            elif post_obj.is_gif():
-                send_method = bot.send_animation
-                params["animation"] = post_obj.file_url
-            elif post_obj.is_vide():
-                send_method = bot.send_video
-                params["video"] = post_obj.file_url
+        params = {
+            "chat_id": CHAT_ID,
+            "caption": await post_obj.caption(),
+            "parse_mode": types.ParseMode.HTML,
+        }
+        if post_obj.is_photo():
+            send_method = bot.send_photo
+            params["photo"] = post_obj.file_url
+        elif post_obj.is_gif():
+            send_method = bot.send_animation
+            params["animation"] = post_obj.file_url
+        elif post_obj.is_vide():
+            send_method = bot.send_video
+            params["video"] = post_obj.file_url
 
-            await send_method(**params)
+        await send_method(**params)
     await Tortoise.close_connections()

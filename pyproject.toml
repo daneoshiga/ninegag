@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "9gagbot"
+name = "ninegag"
 version = "0.1.0"
 description = ""
 authors = ["Danilo Shiga <daniloshiga@gmail.com>"]

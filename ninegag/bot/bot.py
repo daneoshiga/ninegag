@@ -1,3 +1,4 @@
+import asyncio
 import logging
 
 import aiohttp
@@ -63,4 +64,5 @@ async def channel_publish():
                 params["video"] = post_obj.file_url
 
             await send_method(**params)
+            await asyncio.sleep(10)
     await Tortoise.close_connections()

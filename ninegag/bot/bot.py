@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 async def channel_publish():
     await Tortoise.init(
-        db_url="sqlite://db.sqlite3", modules={"models": ["ninegag.models"]}
+        db_url=config("DATABASE_URL"), modules={"models": ["ninegag.models"]}
     )
 
     async with aiohttp.ClientSession() as session:
@@ -64,5 +64,4 @@ async def channel_publish():
                 params["video"] = post_obj.file_url
 
             await send_method(**params)
-            await asyncio.sleep(10)
     await Tortoise.close_connections()

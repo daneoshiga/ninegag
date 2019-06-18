@@ -30,8 +30,10 @@ async def channel_publish():
             posts = response["data"]["posts"]
 
     for post in posts:
-        section, _ = await Section.get_or_create(name=post["postSection"]["name"],
-                                                 slug=post["postSection"]["url"].split("/")[-1])
+        section, _ = await Section.get_or_create(
+            name=post["postSection"]["name"],
+            slug=post["postSection"]["url"].split("/")[-1],
+        )
         post_obj, created = await Post.get_or_create(
             id=post["id"],
             url=post["url"],
@@ -40,8 +42,7 @@ async def channel_publish():
             section=section,
             post_type=post["type"],
             has_audio=bool(
-                post["type"] == "Animated"
-                and post["images"]["image460sv"]["hasAudio"]
+                post["type"] == "Animated" and post["images"]["image460sv"]["hasAudio"]
             ),
             tags=",".join(tag["url"].split("/tag/")[1] for tag in post["tags"]),
         )

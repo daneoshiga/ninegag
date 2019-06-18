@@ -1,6 +1,7 @@
 import html
-from tortoise.models import Model
+
 from tortoise import fields
+from tortoise.models import Model
 
 
 class Post(Model):
@@ -8,7 +9,7 @@ class Post(Model):
     url = fields.CharField(max_length=128)
     file_url = fields.CharField(max_length=128)
     title = fields.CharField(max_length=128)
-    section = fields.ForeignKeyField('models.Section', related_name='posts')
+    section = fields.ForeignKeyField("models.Section", related_name="posts")
     post_type = fields.CharField(max_length=16)
     has_audio = fields.BooleanField()
     tags = fields.CharField(max_length=255)
@@ -17,14 +18,21 @@ class Post(Model):
         return f"{self.title} {self.url}"
 
     async def caption(self):
-        await self.fetch_related('section')
+        await self.fetch_related("section")
         section_tag = self.section.tag()
-        caption = ("<a href='{p.url}'>{p.title}</a>\n\n"
-                   "#{section}".format(p=self, section=section_tag))
+        caption = "<a href='{p.url}'>{p.title}</a>\n\n" "#{section}".format(
+            p=self, section=section_tag
+        )
 
         if self.tags:
-            caption = caption + ' ' + ' '.join("#{tag}".format(
-                tag=tag.replace('-', '_')) for tag in self.tags.split(','))
+            caption = (
+                caption
+                + " "
+                + " ".join(
+                    "#{tag}".format(tag=tag.replace("-", "_"))
+                    for tag in self.tags.split(",")
+                )
+            )
 
         caption = html.unescape(caption)
         return caption
@@ -48,4 +56,4 @@ class Section(Model):
         return self.name
 
     def tag(self):
-        return self.slug.replace('-', '_')
+        return self.slug.replace("-", "_")

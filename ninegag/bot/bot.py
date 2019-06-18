@@ -30,7 +30,8 @@ async def channel_publish():
             posts = response["data"]["posts"]
 
     for post in posts:
-        section, _ = await Section.get_or_create(name=post["postSection"]["name"])
+        section, _ = await Section.get_or_create(name=post["postSection"]["name"],
+                                                 slug=post["postSection"]["url"].split("/")[-1])
         post_obj, created = await Post.get_or_create(
             id=post["id"],
             url=post["url"],

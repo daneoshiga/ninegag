@@ -13,10 +13,14 @@ class Post(Model):
     has_audio = fields.BooleanField()
     tags = fields.CharField(max_length=255)
 
+    def __str__(self):
+        return f"{self.title} {self.url}"
+
     async def caption(self):
         await self.fetch_related('section')
+        section_tag = self.section.tag()
         caption = ("<a href='{p.url}'>{p.title}</a>\n\n"
-                   "#{p.section.name}".format(p=self))
+                   "#{section}".format(p=self, section=section_tag))
 
         if self.tags:
             caption = caption + ' ' + ' '.join("#{tag}".format(
@@ -38,3 +42,10 @@ class Post(Model):
 class Section(Model):
     id = fields.IntField(pk=True)
     name = fields.CharField(max_length=32)
+    slug = fields.CharField(max_length=32)
+
+    def __str__(self):
+        return self.name
+
+    def tag(self):
+        return self.slug.replace('-', '_')

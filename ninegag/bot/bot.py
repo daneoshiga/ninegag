@@ -60,7 +60,7 @@ async def channel_publish():
         elif post_obj.is_gif():
             send_method = bot.send_animation
             params["animation"] = post_obj.file_url
-        elif post_obj.is_vide():
+        elif post_obj.is_video():
             send_method = bot.send_video
             params["video"] = post_obj.file_url
 

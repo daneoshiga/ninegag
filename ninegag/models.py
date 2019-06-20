@@ -25,15 +25,12 @@ class Post(Model):
         )
 
         if self.tags:
-            caption = (
-                caption
-                + " "
-                + " ".join(
-                    "#{tag}".format(tag=tag.replace("-", "_"))
-                    for tag in self.tags.split(",")
-                )
+            caption += +" " + " ".join(
+                "#{tag}".format(tag=tag.replace("-", "_"))
+                for tag in self.tags.split(",")
             )
 
+        caption += "\n\n@nineGagHot"
         caption = html.unescape(caption)
         return caption
 

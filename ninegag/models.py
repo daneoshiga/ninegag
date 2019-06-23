@@ -20,17 +20,16 @@ class Post(Model):
     async def caption(self):
         await self.fetch_related("section")
         section_tag = self.section.tag()
-        caption = "<a href='{p.url}'>{p.title}</a>\n\n" "#{section}".format(
+        caption = "[{p.title}]({p.url})\n\n" "#{section}".format(
             p=self, section=section_tag
         )
 
         if self.tags:
-            caption += +" " + " ".join(
+            caption += " " + " ".join(
                 "#{tag}".format(tag=tag.replace("-", "_"))
                 for tag in self.tags.split(",")
             )
 
-        caption += "\n\n@nineGagHot"
         caption = html.unescape(caption)
         return caption
 

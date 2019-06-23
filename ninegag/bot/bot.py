@@ -52,7 +52,7 @@ async def channel_publish():
         params = {
             "chat_id": CHAT_ID,
             "caption": await post_obj.caption(),
-            "parse_mode": types.ParseMode.MARKDOWN,
+            "parse_mode": types.ParseMode.HTML,
         }
         if post_obj.is_photo():
             send_method = bot.send_photo

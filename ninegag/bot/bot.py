@@ -10,6 +10,7 @@ from tortoise import Tortoise
 
 BOT_TOKEN = config("BOT_TOKEN")
 CHAT_ID = config("CHAT_ID")
+COOKIE_ID = config("COOKIE_ID")
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(bot)
@@ -23,7 +24,24 @@ async def channel_publish():
         db_url=config("DATABASE_URL"), modules={"models": ["ninegag.models"]}
     )
 
-    async with aiohttp.ClientSession() as session:
+    headers = {
+        "Accept": "application/json, text/plain, */*",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Language": "pt-BR,pt;q=0.8,en-US;q=0.5,en;q=0.3",
+        "Cache-Control": "max-age=0",
+        "Connection": "keep-alive",
+        "DNT": "1",
+        "Host": "9gag.com",
+        "Referer": "https://9gag.com/",
+        "TE": "Trailers",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:73.0) Gecko/20100101 Firefox/73.0",
+    }
+
+    cookies = {"__cfduid": COOKIE_ID,
+              "____ri": "6195", "____lo": "US",
+              "gag_tz": "-3"}
+
+    async with aiohttp.ClientSession(headers=headers, cookies=cookies) as session:
         url = "https://9gag.com/v1/group-posts/group/default/type/hot"
         async with session.get(url) as resp:
             response = await resp.json()

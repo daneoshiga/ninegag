@@ -66,6 +66,8 @@ async def channel_publish():
         )
         if not created:
             continue
+        if not post_obj.tags:
+            continue
 
         params = {
             "chat_id": CHAT_ID,

@@ -66,7 +66,7 @@ async def channel_publish():
         )
         if not created:
             continue
-        if not post_obj.section:
+        if section.name == "Promoted":
             continue
 
         params = {

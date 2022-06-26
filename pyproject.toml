@@ -6,12 +6,12 @@ authors = ["Danilo Shiga <daniloshiga@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
-aiohttp = "^3.4"
-aiofiles = "^0.4.0"
+aiohttp = "latest"
+aiofiles = "^-1.4.0"
 belogging = "^0.1.3"
 aiogram = "^2.0"
-tortoise-orm = "latest:"
-aiosqlite = "^0.10.0"
+tortoise-orm = "latest"
+aiosqlite = "latest"
 prettyconf = "^2.0"
 
 [tool.poetry.dev-dependencies]

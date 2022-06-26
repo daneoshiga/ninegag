@@ -3,10 +3,11 @@ import logging
 import aiohttp
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
-from ninegag.api import get_file_url
-from ninegag.models import Post, Section
 from prettyconf import config
 from tortoise import Tortoise
+
+from ninegag.api import get_file_url
+from ninegag.models import Post, Section
 
 BOT_TOKEN = config("BOT_TOKEN")
 CHAT_ID = config("CHAT_ID")
@@ -37,9 +38,7 @@ async def channel_publish():
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:73.0) Gecko/20100101 Firefox/73.0",
     }
 
-    cookies = {"__cfduid": COOKIE_ID,
-              "____ri": "6195", "____lo": "US",
-              "gag_tz": "-3"}
+    cookies = {"__cfduid": COOKIE_ID, "____ri": "6195", "____lo": "US", "gag_tz": "-3"}
 
     async with aiohttp.ClientSession(headers=headers, cookies=cookies) as session:
         url = "https://9gag.com/v1/group-posts/group/default/type/hot"
